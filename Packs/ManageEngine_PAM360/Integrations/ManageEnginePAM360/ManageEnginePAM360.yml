@@ -22,35 +22,32 @@ configuration:
   name: proxy
   required: false
   type: 8
-description: '[Enter a comprehensive, yet concise, description of what the integration
-  does, what use cases it is designed for, etc.]'
+description: 'PAM360 integrates with CORTEX XSOAR through bots that can fetch passwords from the PAM360 vault, to be used in their tasks.'
 display: ManageEngine_PAM360
 name: ManageEngine_PAM360
 script:
   commands:
   - arguments:
     - default: false
-      description: '[Enter a description of the argument, including any important
-        information users need to know, for example, default values.]'
+      description: 'PAM360 integrates with CORTEX XSOAR through bots that can fetch passwords from the PAM360 vault, to be used in their tasks.'
       isArray: false
       name: dummy
       required: true
       secret: false
     deprecated: false
-    description: '[Enter a description of the command, including any important information
-      users need to know, for example required permissions.]'
+    description: 'PAM360 integrates with CORTEX XSOAR through bots that can fetch passwords from the PAM360 vault, to be used in their tasks.'
     execution: false
     name: baseintegration-dummy
     outputs:
     - contextPath: BaseIntegration.Output
-      description: '[Enter a description of the data returned in this output.]'
+      description: 'PAM360 integrates with CORTEX XSOAR through bots that can fetch passwords from the PAM360 vault, to be used in their tasks.'
       type: String
   isfetch: false
   runonce: false
   script: '-'
   type: python
   subtype: python3
-  dockerimage: demisto/python3:3.9.7.24076
+  dockerimage: demisto/python3:3.9.8.24399
 fromversion: 5.5.0
 tests:
 - No tests (auto formatted)
