@@ -1,8 +1,7 @@
 category: Authentication
 commonfields:
-  id: ManageEngine_PAM360
+  id: ManageEngine PAM360
   version: -1
-vcShouldKeepItemLegacyProdMachine: false
 name: ManageEngine PAM360
 display: PAM360
 description: Integration to fetch credentials from PAM360 vault.
@@ -11,7 +10,7 @@ configuration:
   name: URL
   type: 12
   required: true
-- display: APP_TOKEN
+- display: APP TOKEN
   name: APP_TOKEN
   type: 0
   required: true
@@ -27,95 +26,149 @@ configuration:
   required: false
 script:
   commands:
-    - name: pam360-fetch-password
-      arguments:
-        - name: resource_id
-          isArray: true
-        - name: account_id
-          isArray: true
-        - name: reason
-        - name: ticket_id
-      outputs:
-        - contextPath: PAM360.Account.operation.Details.PASSWORD
-          type: string
-    - name: pam360-create-resource
-      arguments:
-        - name: resource_name
-          required: true
-        - name: account_name
-          required: true
-        - name: resource_type
-          required: true
-        - name: resource_url
-        - name: password
-          required: true
-        - name: notes
-        - name: resource_password_policy
-        - name: account_password_policy
-        - name: location
-        - name: dnsname
-        - name: department
-      outputs: []
-    - name: pam360-create-account
-      arguments:
-        - name: account_name
-          required: true
-        - name: password
-          required: true
-        - name: notes
-        - name: account_password_policy
-        - name: resource_id
-      outputs: []
-    - name: pam360-update-resource
-      arguments:
-        - name: resource_id
-          required: true
-        - name: resource_name
-          required: true
-        - name: resource_type
-        - name: resource_url
-        - name: password
-        - name: resource_description
-        - name: resource_password_policy
-        - name: location
-        - name: department
-      outputs: []
-    - name: pam360-update-account
-      arguments:
-        - name: resource_id
-          required: true
-        - name: account_id
-          required: true
-        - name: account_name
-        - name: notes
-        - name: account_password_policy
-      outputs: []
-    - name: pam360-fetch-account-details
-      arguments:
-        - name: resource_id
-          required: true
-        - name: account_id
-          required: true
-      outputs: []
-    - name: pam360-list-all-resources
-      arguments: []
-      outputs: []
-    - name: pam360-list-all-accounts
-      arguments:
-        - name: resource_id
-          required: true
-      outputs: []
-    - name: pam360-update-account-password
-      arguments:
-        - name: resource_id
-          required: true
-        - name: account_id
-        - name: new_password
-          required: true
-        - name: reset_type
-        - name: reason
-        - name: ticket_id
-      outputs: []
+  - name: pam360-fetch-password
+    description: Command to fetch password.
+    arguments:
+    - name: resource_id
+      description: ID of the resource.
+      isArray: true
+    - name: account_id
+      description: ID of the account.
+      isArray: true
+    - name: reason
+      description: Reason to fetch password.
+    - name: ticket_id
+      description: Ticket ID when Ticketing system is enabled.
+    outputs:
+    - contextPath: PAM360.Account.operation.Details.PASSWORD
+      description: Password of the account.
+      type: string
+  - name: pam360-create-resource
+    description: Command to create resource.
+    arguments:
+    - name: resource_name
+      description: Name of the resource.
+      required: true
+    - name: account_name
+      description: Name of the account.
+      required: true
+    - name: resource_type
+      description: Type of the resource.
+      required: true
+    - name: resource_url
+      description: URL of the resource.
+    - name: password
+      description: Password for the account.
+      required: true
+    - name: notes
+      description: Description for the resource.
+    - name: resource_password_policy
+      description: Policy for the resource.
+    - name: account_password_policy
+      description: Policy for the account.
+    - name: location
+      description: Location
+    - name: dnsname
+      description: DNS Name or IP address.
+    - name: department
+      description: Department.
+    outputs: []
+  - name: pam360-create-account
+    description: Command to create account.
+    arguments:
+    - name: account_name
+      description: Name of the account.
+      required: true
+    - name: password
+      description: Password of the account.
+      required: true
+    - name: notes
+      description: Account description
+    - name: account_password_policy
+      description: Policy of an account.
+    - name: resource_id
+      description: ID of the resource.
+    outputs: []
+  - name: pam360-update-resource
+    description: Command to update resource.
+    arguments:
+    - name: resource_id
+      description: ID of the resource.
+      required: true
+    - name: resource_name
+      description: Name of the resource.
+      required: true
+    - name: resource_type
+      description: Type of the resource.
+    - name: resource_url
+      description: URL of the resource.
+    - name: password
+      description: Password of a resource.
+    - name: resource_description
+      description: Description
+    - name: resource_password_policy
+      description: Policy for a resource.
+    - name: location
+      description: Location
+    - name: department
+      description: Department
+    outputs: []
+  - name: pam360-update-account
+    description: Command to update account.
+    arguments:
+    - name: resource_id
+      description: ID of the resource.
+      required: true
+    - name: account_id
+      description: ID of the account.
+      required: true
+    - name: account_name
+      description: Name of the account
+    - name: notes
+      description: Notes
+    - name: account_password_policy
+      description: Policy of an account.
+    outputs: []
+  - name: pam360-fetch-account-details
+    description: Command to fetch account details.
+    arguments:
+    - name: resource_id
+      description: ID of the resource.
+      required: true
+    - name: account_id
+      description: ID of the account.
+      required: true
+    outputs: []
+  - name: pam360-list-all-resources
+    description: Command to list all resources.
+    arguments: []
+    outputs: []
+  - name: pam360-list-all-accounts
+    description: Command to list all account of a resource.
+    arguments:
+    - name: resource_id
+      description: ID of the resource.
+      required: true
+    outputs: []
+  - name: pam360-update-account-password
+    description: Command to update account password.
+    arguments:
+    - name: resource_id
+      description: ID of the resource.
+      required: true
+    - name: account_id
+      description: ID of the account.
+      required: true
+    - name: new_password
+      description: Password to be updated.
+      required: true
+    - name: reset_type
+      description: Reset type
+    - name: reason
+      description: Reason to update password.
+    - name: ticket_id
+      description: Ticket ID when Ticketing system is enabled.
+    outputs: []
   isfetch: false
   runonce: false
   script: "-"
@@ -124,4 +177,4 @@ script:
   dockerimage: demisto/python3:3.9.8.24399
 fromversion: 5.5.0
 tests:
-  - No tests (auto formatted)
+- No tests (auto formatted)

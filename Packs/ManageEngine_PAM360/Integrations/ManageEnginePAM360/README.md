@@ -8,7 +8,7 @@ Use the ManageEngine PAM360 to manage passwords, resources and accounts from Cor
 
 | **Parameter** | **Description** | **Required** |
 | --- | --- | --- |
-| url | Server URL \(e.g., https://pam360:8282\) | True |
+| url | Server URL \(e.g., https://example.com\) | True |
 | APP_TOKEN | Token to access PAM360 vault | True |
 | insecure | Trust any certificate \(not secure\) | False |
 | proxy | Use system proxy settings | False |
