@@ -1,173 +1,333 @@
-"""Base Integration for Cortex XSOAR (aka Demisto)
-
-This is an empty Integration with some basic structure according
-to the code conventions.
-
-MAKE SURE YOU REVIEW/REPLACE ALL THE COMMENTS MARKED AS "TODO"
-
-Developer Documentation: https://xsoar.pan.dev/docs/welcome
-Code Conventions: https://xsoar.pan.dev/docs/integrations/code-conventions
-Linting: https://xsoar.pan.dev/docs/integrations/linting
-
-This is an empty structure file. Check an example at;
-https://github.com/demisto/content/blob/master/Packs/HelloWorld/Integrations/HelloWorld/HelloWorld.py
-
-"""
-
-import demistomock as demisto
-from CommonServerPython import *  # noqa # pylint: disable=unused-wildcard-import
-from CommonServerUserPython import *  # noqa
-
+import json
+import collections
 import requests
-import traceback
-from typing import Dict, Any
-
-# Disable insecure warnings
-requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
-
-
-''' CONSTANTS '''
-
-DATE_FORMAT = '%Y-%m-%dT%H:%M:%SZ'  # ISO8601 format with UTC, default in XSOAR
-
-''' CLIENT CLASS '''
-
-
+import urllib3
+urllib3.disable_warnings()
 class Client(BaseClient):
-    """Client class to interact with the service API
+    def __init__(self, server_url: str, use_ssl: bool, proxy: bool, app_token= str):
+        super().__init__(base_url=server_url, verify=use_ssl, proxy=proxy)
+        self._app_token = app_token
 
-    This Client implements API calls, and does not contain any XSOAR logic.
-    Should only do requests and return data.
-    It inherits from BaseClient defined in CommonServer Python.
-    Most calls use _http_request() that handles proxy, SSL verification, etc.
-    For this  implementation, no special attributes defined
-    """
+    def fetch_password(self,method,resid,accid):
+        URL_SUFFIX = f'/restapi/json/v1/resources/{resid}/accounts/{accid}/password'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers)
 
-    # TODO: REMOVE the following dummy function:
-    def baseintegration_dummy(self, dummy: str) -> Dict[str, str]:
-        """Returns a simple python dict with the information provided
-        in the input (dummy).
+    def create_resource(self,method,resource_name, account_name, resource_type, resource_url, password, notes, resource_password_policy, account_password_policy):
+        URL_SUFFIX = '/restapi/json/v1/resources'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        query = {
+            "operation":{
+                "Details":{
+                    "RESOURCENAME":resource_name,
+                    "ACCOUNTNAME":account_name,
+                    "RESOURCETYPE":resource_type,
+                    "PASSWORD":password,
+                    "NOTES":notes,
+                    "RESOURCEURL":resource_url,
+                    "RESOURCEPASSWORDPOLICY":resource_password_policy,
+                    "ACCOUNTPASSWORDPOLICY":account_password_policy
+                }
+            }
+        }
+        params = {
+            'INPUT_DATA': f'{query}'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers, data=params)
 
-        :type dummy: ``str``
-        :param dummy: string to add in the dummy dict that is returned
+    def create_account(self, method, resource_id, account_name, password, notes, account_password_policy):
+        URL_SUFFIX = f'/restapi/json/v1/resources/{resource_id}/accounts'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        query = {
+            "operation":{
+                "Details":{
+                    "ACCOUNTNAME":account_name,
+                    "PASSWORD":password,
+                    "NOTES":notes,
+                    "ACCOUNTPASSWORDPOLICY":account_password_policy
+                }
+            }
+        }
+        params = {
+            'INPUT_DATA': f'{query}'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers, data=params)
 
-        :return: dict as {"dummy": dummy}
-        :rtype: ``str``
-        """
+    def update_resource(self,method,resource_id, resource_name, resource_type, resource_url, password, resource_description, resource_password_policy, location, department):
+        URL_SUFFIX = f'/restapi/json/v1/resources/{resource_id}'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        query = {
+            "operation":{
+                "Details":{
+                    "RESOURCENAME":resource_name,
+                    "RESOURCETYPE":resource_type,
+                    "PASSWORD":password,
+                    "RESOURCEDESCRIPTION":resource_description,
+                    "RESOURCEURL":resource_url,
+                    "RESOURCEPASSWORDPOLICY":resource_password_policy,
+                    "LOCATION":location,
+                    "DEPARTMENT":department
+                }
+            }
+        }
+        params = {
+            'INPUT_DATA': f'{query}'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers, data=params)
 
-        return {"dummy": dummy}
-    # TODO: ADD HERE THE FUNCTIONS TO INTERACT WITH YOUR PRODUCT API
+    def update_account(self, method, resource_id, account_id, account_name, notes, account_password_policy):
+        URL_SUFFIX = f'/restapi/json/v1/resources/{resource_id}/accounts/{account_id}'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        query = {
+            "operation":{
+                "Details":{
+                    "ACCOUNTNAME":account_name,
+                    "NOTES":notes,
+                    "ACCOUNTPASSWORDPOLICY":account_password_policy
+                }
+            }
+        }
+        params = {
+            'INPUT_DATA': f'{query}'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers, data=params)
 
+    def fetch_account_details(self,method,resource_id,account_id):
+        URL_SUFFIX = f'/restapi/json/v1/resources/{resource_id}/accounts/{account_id}'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers)
 
-''' HELPER FUNCTIONS '''
+    def fetch_resources(self,method):
+        URL_SUFFIX = '/restapi/json/v1/resources'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers)
 
-# TODO: ADD HERE ANY HELPER FUNCTION YOU MIGHT NEED (if any)
+    def fetch_accounts(self,method, resource_id):
+        URL_SUFFIX = f'/restapi/json/v1/resources/{resource_id}/accounts'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers)
 
-''' COMMAND FUNCTIONS '''
+    def update_account_password(self, method, resource_id, account_id, new_password, reset_type, reason, ticket_id):
+        URL_SUFFIX = f'/restapi/json/v1/resources/{resource_id}/accounts/{account_id}'
+        headers = {
+            'APP_AUTHTOKEN': self._app_token,
+            'APP_TYPE' : '17'
+        }
+        query = {
+            "operation":{
+                "Details":{
+                    "NEWPASSWORD":new_password,
+                    "RESETTYPE":reset_type,
+                    "REASON":reason,
+                    "TICKETID":ticket_id
+                }
+            }
+        }
+        params = {
+            'INPUT_DATA': f'{query}'
+        }
+        return self._http_request(method, URL_SUFFIX, headers=headers, data=params)
 
-
-def test_module(client: Client) -> str:
-    """Tests API connectivity and authentication'
-
-    Returning 'ok' indicates that the integration works like it is supposed to.
-    Connection to the service is successful.
-    Raises exceptions if something goes wrong.
-
-    :type client: ``Client``
-    :param Client: client to use
-
-    :return: 'ok' if test passed, anything else will fail the test.
-    :rtype: ``str``
-    """
-
-    message: str = ''
-    try:
-        # TODO: ADD HERE some code to test connectivity and authentication to your service.
-        # This  should validate all the inputs given in the integration configuration panel,
-        # either manually or by using an API that uses them.
-        message = 'ok'
-    except DemistoException as e:
-        if 'Forbidden' in str(e) or 'Authorization' in str(e):  # TODO: make sure you capture authentication errors
-            message = 'Authorization Error: make sure API Key is correctly set'
-        else:
-            raise e
-    return message
-
-
-# TODO: REMOVE the following dummy command function
-def baseintegration_dummy_command(client: Client, args: Dict[str, Any]) -> CommandResults:
-
-    dummy = args.get('dummy', None)
-    if not dummy:
-        raise ValueError('dummy not specified')
-
-    # Call the Client function and get the raw response
-    result = client.baseintegration_dummy(dummy)
-
-    return CommandResults(
-        outputs_prefix='BaseIntegration',
-        outputs_key_field='',
-        outputs=result,
+def pam360_fetch_password(client,**args):
+    resid = args.get("resource_id")
+    accid = args.get("account_id")
+    creds_list = client.fetch_password("GET",resid,accid)
+    password = creds_list.get('operation').get('Details').get('PASSWORD')
+    readable_output = f'{password}'
+    results = CommandResults(
+        outputs=creds_list,
+        raw_response=creds_list,
+        outputs_prefix='PAM360.Account',
+        outputs_key_field='PASSWORD',
+        readable_output=readable_output,
     )
-# TODO: ADD additional command functions that translate XSOAR inputs/outputs to Client
+    return results
 
+def pam360_create_resource(client,**args):
+    resource_name = args.get("resource_name")
+    account_name  = args.get("account_name")
+    resource_type  = args.get("resource_type")
+    resource_url = args.get("resource_url")
+    password = args.get("password")
+    notes = args.get("notes")
+    resource_password_policy = args.get("resource_password_policy")
+    account_password_policy = args.get("account_password_policy")
+    create_resource = client.create_resource("POST",resource_name, account_name, resource_type, resource_url, password, notes, resource_password_policy, account_password_policy)
+    readable_output = f'{create_resource}'
+    results = CommandResults(
+        outputs=create_resource,
+        raw_response=create_resource,
+        outputs_prefix='PAM360.Resource',
+        outputs_key_field='message',
+        readable_output=readable_output,
+    )
+    return results
 
-''' MAIN FUNCTION '''
+def pam360_create_account(client,**args):
+    resource_id = args.get("resource_id")
+    account_name  = args.get("account_name")
+    password = args.get("password")
+    notes = args.get("notes")
+    account_password_policy = args.get("account_password_policy")
+    create_account = client.create_account("POST", resource_id, account_name, password, notes, account_password_policy)
+    readable_output = f'{create_account}'
+    results = CommandResults(
+        outputs=create_account,
+        raw_response=create_account,
+        outputs_prefix='PAM360.Account',
+        outputs_key_field='message',
+        readable_output=readable_output,
+    )
+    return results
 
+def pam360_update_resource(client,**args):
+    resource_id = args.get("resource_id")
+    resource_name = args.get("resource_name")
+    resource_type  = args.get("resource_type")
+    resource_url = args.get("resource_url")
+    password = args.get("password")
+    resource_description = args.get("resource_description")
+    resource_password_policy = args.get("resource_password_policy")
+    location = args.get("location")
+    department = args.get("department")
+    update_resource = client.update_resource("PUT",resource_id, resource_name, resource_type, resource_url, password, resource_description, resource_password_policy, location, department)
+    readable_output = f'{update_resource}'
+    results = CommandResults(
+        outputs=update_resource,
+        raw_response=update_resource,
+        outputs_prefix='PAM360.Resource',
+        outputs_key_field='message',
+        readable_output=readable_output,
+    )
+    return results
 
-def main() -> None:
-    """main function, parses params and runs command functions
+def pam360_update_account(client,**args):
+    resource_id = args.get("resource_id")
+    account_id = args.get("account_id")
+    account_name  = args.get("account_name")
+    notes = args.get("notes")
+    account_password_policy = args.get("account_password_policy")
+    update_account = client.update_account("PUT", resource_id, account_id, account_name, notes, account_password_policy)
+    readable_output = f'{create_resource}'
+    results = CommandResults(
+        outputs=update_account,
+        raw_response=update_account,
+        outputs_prefix='PAM360.Account',
+        outputs_key_field='message',
+        readable_output=readable_output,
+    )
+    return results
 
-    :return:
-    :rtype:
-    """
+def pam360_fetch_account_details(client,**args):
+    resource_id = args.get("resource_id")
+    account_id = args.get("account_id")
+    account_details = client.fetch_account_details("GET",resource_id,account_id)
+    readable_output = f'{account_details}'
+    results = CommandResults(
+        outputs=account_details,
+        raw_response=account_details,
+        outputs_prefix='PAM360.Account',
+        outputs_key_field='message',
+        readable_output=readable_output,
+    )
+    return results
 
-    # TODO: make sure you properly handle authentication
-    # api_key = demisto.params().get('credentials', {}).get('password')
+def pam360_list_resources(client,**args):
+    resource_list = client.fetch_resources("GET")
+    readable_output = f'{resource_list}'
+    results = CommandResults(
+        outputs=resource_list,
+        raw_response=resource_list,
+        outputs_prefix='PAM360.Resource',
+        outputs_key_field='message',
+        readable_output=readable_output,
+    )
+    return results
 
-    # get the service API url
-    base_url = urljoin(demisto.params()['url'], '/api/v1')
+def pam360_list_accounts(client,**args):
+    resource_id = args.get("resource_id")
+    account_list = client.fetch_accounts("GET", resource_id)
+    readable_output = f'{account_list}'
+    results = CommandResults(
+        outputs=account_list,
+        raw_response=account_list,
+        outputs_prefix='PAM360.Account',
+        outputs_key_field='message',
+        readable_output=readable_output,
+    )
+    return results
 
-    # if your Client class inherits from BaseClient, SSL verification is
-    # handled out of the box by it, just pass ``verify_certificate`` to
-    # the Client constructor
-    verify_certificate = not demisto.params().get('insecure', False)
+def pam360_update_account_password(client,**args):
+    resource_id = args.get("resource_id")
+    account_id = args.get("account_id")
+    new_password  = args.get("new_password")
+    reset_type = args.get("reset_type")
+    reason = args.get("reason")
+    ticket_id = args.get("ticket_id")
+    update_password = client.update_account_password("PUT", resource_id, account_id, new_password, reset_type, reason, ticket_id)
+    readable_output = f'{update_password}'
+    results = CommandResults(
+        outputs=update_password,
+        raw_response=update_password,
+        outputs_prefix='PAM360.Account',
+        outputs_key_field='message',
+        readable_output=readable_output,
+    )
+    return results
 
-    # if your Client class inherits from BaseClient, system proxy is handled
-    # out of the box by it, just pass ``proxy`` to the Client constructor
-    proxy = demisto.params().get('proxy', False)
-
-    demisto.debug(f'Command being called is {demisto.command()}')
+def main():
+    params = demisto.params()
+    url = params.get('URL')
+    app_token = params.get('APP_TOKEN')
+    use_ssl = not params.get('insecure', False)
+    proxy = params.get('proxy', False)
     try:
+        client = Client(server_url=url, use_ssl=use_ssl, proxy=proxy, app_token=app_token)
+        command = demisto.command()
+        demisto.debug(f'Command being called in PAM360 is: {command}')
+        commands = {
+            'pam360-fetch-password':pam360_fetch_password,
+            'pam360-create-resource':pam360_create_resource,
+            'pam360-create-account':pam360_create_account,
+            'pam360-update-resource':pam360_update_resource,
+            'pam360-update-account':pam360_update_account,
+            'pam360-fetch-account-details':pam360_fetch_account_details,
+            'pam360-list-all-resources':pam360_list_resources,
+            'pam360-list-all-accounts':pam360_list_accounts,
+            'pam360-update-account-password':pam360_update_account_password,
+        }
+        if command in commands:
+            return_results(commands[command](client,**demisto.args()))
 
-        # TODO: Make sure you add the proper headers for authentication
-        # (i.e. "Authorization": {api key})
-        headers: Dict = {}
-
-        client = Client(
-            base_url=base_url,
-            verify=verify_certificate,
-            headers=headers,
-            proxy=proxy)
-
-        if demisto.command() == 'test-module':
-            # This is the call made when pressing the integration Test button.
-            result = test_module(client)
-            return_results(result)
-
-        # TODO: REMOVE the following dummy command case:
-        elif demisto.command() == 'baseintegration-dummy':
-            return_results(baseintegration_dummy_command(client, demisto.args()))
-        # TODO: ADD command cases for the commands you will implement
-
-    # Log exceptions and return errors
-    except Exception as e:
-        demisto.error(traceback.format_exc())  # print the traceback
-        return_error(f'Failed to execute {demisto.command()} command.\nError:\n{str(e)}')
+        else:
+            raise NotImplementedError(f'{command} is not an existing PAM360 command')
+    except Exception as err:
+        return_error(f'Unexpected error: {str(err)}', error=traceback.format_exc())
 
 
-''' ENTRY POINT '''
-
-
-if __name__ in ('__main__', '__builtin__', 'builtins'):
+if __name__ in ['__main__', 'builtin', 'builtins']:
     main()

@@ -1,5 +1,19 @@
-This README contains the full documentation for your integration.
+Use the ManageEngine PAM360 to manage passwords, resources and accounts from Cortex XSOAR.
 
-You auto-generate this README file from your integration YML file using the `demisto-sdk generate-docs` command.
+## Configure ManageEngine PAM360 on Cortex XSOAR
 
-For more information see the [integration documentation](https://xsoar.pan.dev/docs/integrations/integration-docs).
+1. Navigate to **Settings** > **Integrations** > **Servers & Services**.
+2. Search for ManageEngine PAM360.
+3. Click **Add instance** to create and configure a new integration instance.
+
+| **Parameter** | **Description** | **Required** |
+| --- | --- | --- |
+| url | Server URL \(e.g., https://pam360:8282\) | True |
+| APP_TOKEN | Token to access PAM360 vault | True |
+| insecure | Trust any certificate \(not secure\) | False |
+| proxy | Use system proxy settings | False |
+
+4. Click **Test** to validate the URLs, token, and connection.
+## Commands
+You can execute these commands from the Cortex XSOAR CLI, as part of an automation, or in a playbook.
+After you successfully execute a command, a DBot message appears in the War Room with the command details.

@@ -2,52 +2,126 @@ category: Authentication
 commonfields:
   id: ManageEngine_PAM360
   version: -1
+vcShouldKeepItemLegacyProdMachine: false
+name: ManageEngine PAM360
+display: PAM360
+description: Integration to fetch credentials from PAM360 vault.
 configuration:
-- defaultvalue: https://example.com/
-  display: Your server URL
-  name: url
+- display: Server URL
+  name: URL
+  type: 12
   required: true
+- display: APP_TOKEN
+  name: APP_TOKEN
   type: 0
-- displaypassword: API Key
-  additionalinfo: The API Key to use for connection
-  name: credentials
   required: true
-  hiddenusername: true
-  type: 9
 - display: Trust any certificate (not secure)
   name: insecure
-  required: false
+  defaultvalue: "false"
   type: 8
+  required: false
 - display: Use system proxy settings
   name: proxy
-  required: false
+  defaultvalue: "false"
   type: 8
-description: 'PAM360 integrates with CORTEX XSOAR through bots that can fetch passwords from the PAM360 vault, to be used in their tasks.'
-display: ManageEngine_PAM360
-name: ManageEngine_PAM360
+  required: false
 script:
   commands:
-  - arguments:
-    - default: false
-      description: 'PAM360 integrates with CORTEX XSOAR through bots that can fetch passwords from the PAM360 vault, to be used in their tasks.'
-      isArray: false
-      name: dummy
-      required: true
-      secret: false
-    deprecated: false
-    description: 'PAM360 integrates with CORTEX XSOAR through bots that can fetch passwords from the PAM360 vault, to be used in their tasks.'
-    execution: false
-    name: baseintegration-dummy
-    outputs:
-    - contextPath: BaseIntegration.Output
-      description: 'PAM360 integrates with CORTEX XSOAR through bots that can fetch passwords from the PAM360 vault, to be used in their tasks.'
-      type: String
+    - name: pam360-fetch-password
+      arguments:
+        - name: resource_id
+          isArray: true
+        - name: account_id
+          isArray: true
+        - name: reason
+        - name: ticket_id
+      outputs:
+        - contextPath: PAM360.Account.operation.Details.PASSWORD
+          type: string
+    - name: pam360-create-resource
+      arguments:
+        - name: resource_name
+          required: true
+        - name: account_name
+          required: true
+        - name: resource_type
+          required: true
+        - name: resource_url
+        - name: password
+          required: true
+        - name: notes
+        - name: resource_password_policy
+        - name: account_password_policy
+        - name: location
+        - name: dnsname
+        - name: department
+      outputs: []
+    - name: pam360-create-account
+      arguments:
+        - name: account_name
+          required: true
+        - name: password
+          required: true
+        - name: notes
+        - name: account_password_policy
+        - name: resource_id
+      outputs: []
+    - name: pam360-update-resource
+      arguments:
+        - name: resource_id
+          required: true
+        - name: resource_name
+          required: true
+        - name: resource_type
+        - name: resource_url
+        - name: password
+        - name: resource_description
+        - name: resource_password_policy
+        - name: location
+        - name: department
+      outputs: []
+    - name: pam360-update-account
+      arguments:
+        - name: resource_id
+          required: true
+        - name: account_id
+          required: true
+        - name: account_name
+        - name: notes
+        - name: account_password_policy
+      outputs: []
+    - name: pam360-fetch-account-details
+      arguments:
+        - name: resource_id
+          required: true
+        - name: account_id
+          required: true
+      outputs: []
+    - name: pam360-list-all-resources
+      arguments: []
+      outputs: []
+    - name: pam360-list-all-accounts
+      arguments:
+        - name: resource_id
+          required: true
+      outputs: []
+    - name: pam360-update-account-password
+      arguments:
+        - name: resource_id
+          required: true
+        - name: account_id
+        - name: new_password
+          required: true
+        - name: reset_type
+        - name: reason
+        - name: ticket_id
+      outputs: []
   isfetch: false
   runonce: false
-  script: '-'
+  script: "-"
   type: python
   subtype: python3
   dockerimage: demisto/python3:3.9.8.24399
 fromversion: 5.5.0
 tests:
-- No tests (auto formatted)
+  - No tests (auto formatted)
