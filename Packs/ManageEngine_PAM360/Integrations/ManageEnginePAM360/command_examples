@@ -1,0 +1,10 @@
+!pam360-fetch-password resource_id=1 account_id=1 reason="Need the password to Login Windows Server" ticket_id=7
+!pam360-create-resource resource_name="pmp-win10" resource_type="Windows" resource_url="http://windowsserver/adminconsole" domain_name="pmp-win10" resourcegroup_name="Windows Servers" owner_name="admin" location="Level 10 - South Wing" dnsname="pmp-win10" department="NOC" resource_descritpion="Testing API" notes="Testing API" account_name="administrator" password="Test@123" resource_password_policy="Strong" account_password_policy="Strong"
+!pam360-create-account resource_id=1 account_name="admin" password="Test@123" notes="Testing API" account_password_policy="Strong"
+!pam360-update-resource resource_id=1 resource_name="pmp-win10" resource_type="Windows" resource_url="http://windowsserver/adminconsole" resource_description="Testing API" resource_password_policy="Strong" location="Level 10 - South Wing" department="NOC" dnsname="pmp-win10" owner_name="admin"
+!pam360-update-account resource_id=1 account_id=1 account_name="admin" owner_name="admin" notes="Testing API" account_password_policy="Strong"
+!pam360-fetch-account-details resource_id=1 account_id=1
+!pam360-list-all-resources
+!pam360-list-all-accounts resource_id=1
+!pam360-update-account-password resource_id=1 account_id=1 new_password="win@10" reset_type="local" reason="Password Expired" ticket_id=7
+!pam360-fetch-resource-account-id resource_name=1 account_name=1
