@@ -148,7 +148,7 @@ LIST_ALL_ACCOUNTS_CONTEXT = {
          "DEPARTMENT":"",
          "RESOURCE OWNER":"admin",
          "RESOURCE PASSWORD POLICY":"Strong",
-         "RESOURCE URL":"https://nithya-7423:8282",
+         "RESOURCE URL":"https://pam360:8282",
          "NEWSSHTERMINAL":"false",
          "DOMAIN NAME":"",
          "ALLOWOPENURLINBROWSER":"true",
