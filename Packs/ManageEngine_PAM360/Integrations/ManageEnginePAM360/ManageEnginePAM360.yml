@@ -3,8 +3,8 @@ commonfields:
   id: ManageEngine PAM360
   version: -1
 name: ManageEngine PAM360
-display: PAM360
-description: Integration to fetch credentials from PAM360 vault.
+display: ManageEngine PAM360
+description: Integration to fetch passwords from the PAM360 repository, manage accounts, resources, and privileged credentials.
 configuration:
 - display: Server URL
   name: url
@@ -16,18 +16,18 @@ configuration:
   required: true
 - display: Trust any certificate (not secure)
   name: insecure
-  defaultvalue: "false"
+  defaultvalue: false
   type: 8
   required: false
 - display: Use system proxy settings
   name: proxy
-  defaultvalue: "false"
+  defaultvalue: false
   type: 8
   required: false
 script:
   commands:
   - name: pam360-fetch-password
-    description: Command to fetch password.
+    description: Fetches account passwords.
     arguments:
     - name: resource_id
       description: ID of the resource.
@@ -36,21 +36,21 @@ script:
       description: ID of the account.
       required: true
     - name: reason
-      description: Reason to fetch password.
+      description: Reason to fetch the password.
     - name: ticket_id
-      description: Ticket ID when Ticketing system is enabled.
+      description: Ticket ID when the ticketing system integration is enabled.
     outputs:
     - contextPath: PAM360.Account.operation.Details.PASSWORD
-      description: Password of the account.
+      description: Account password.
       type: string
     - contextPath: PAM360.Account.operation.result.message
-      description: Message 
+      description: Command execution status. 
       type: string
     - contextPath: PAM360.Account.operation.result.status
-      description: Status of the API call.
+      description: Status of the operation.
       type: string
   - name: pam360-create-resource
-    description: Command to create resource.
+    description: Creates a new resource.
     arguments:
     - name: resource_name
       description: Name of the resource.
@@ -63,38 +63,38 @@ script:
     - name: domain_name
       description: Domain name of the resource.
     - name: resourcegroup_name
-      description: Resource group name to add this resource.
+      description: Name of the resource group to which this resource belongs.
     - name: owner_name
-      description: Owner name for this resource.
+      description: Name of the resource owner.
     - name: location
-      description: Location
+      description: Location of the resource.
     - name: dnsname
       description: DNS Name or IP address.
     - name: department
-      description: Department.
+      description: The department to which the account belongs.
     - name: resource_descritpion
       description: Description of the resource.
     - name: notes
-      description: Description for the resource.
+      description: Additional notes about the resource.
     - name: account_name
       description: Name of the account.
       required: true
     - name: password
-      description: Password for the account.
+      description: Account password.
       required: true
     - name: resource_password_policy
-      description: Policy for the resource.
+      description: Password policy for the resource.
     - name: account_password_policy
-      description: Policy for the account.
+      description: Password policy for the account.
     outputs:
     - contextPath: PAM360.Resource.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Resource.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
   - name: pam360-create-account
-    description: Command to create account.
+    description: Creates a new account under a specified resource.
     arguments:
     - name: resource_id
       description: ID of the resource.
@@ -103,21 +103,21 @@ script:
       description: Name of the account.
       required: true
     - name: password
-      description: Password of the account.
+      description: Account password.
       required: true
     - name: notes
-      description: Account description
+      description: Account description.
     - name: account_password_policy
-      description: Policy of an account.
+      description: Password policy of the account.
     outputs:
     - contextPath: PAM360.Account.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Account.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
   - name: pam360-update-resource
-    description: Command to update resource.
+    description: Updates the resource attributes.
     arguments:
     - name: resource_id
       description: ID of the resource.
@@ -130,26 +130,26 @@ script:
     - name: resource_url
       description: URL of the resource.
     - name: resource_description
-      description: Description
+      description: Description of the resource.
     - name: resource_password_policy
-      description: Policy for a resource.
+      description: Password policy of the resource.
     - name: location
-      description: Location
+      description: Location of the resource.
     - name: department
-      description: Department
+      description: The department to which the account belongs.
     - name: dnsname
       description: DNS name of the resource.
     - name: owner_name
-      description: Owner name of the resource.
+      description: Name of the resource owner.
     outputs:
     - contextPath: PAM360.Resource.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Resource.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
   - name: pam360-update-account
-    description: Command to update account.
+    description: Updates the account attributes.
     arguments:
     - name: resource_id
       description: ID of the resource.
@@ -158,22 +158,22 @@ script:
       description: ID of the account.
       required: true
     - name: account_name
-      description: Name of the account
+      description: Name of the account.
     - name: owner_name
       description: Name of the owner.
     - name: notes
-      description: Notes
+      description: Additional notes about the account.
     - name: account_password_policy
-      description: Policy of an account.
+      description: Password policy of the account.
     outputs:
     - contextPath: PAM360.Account.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Account.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
   - name: pam360-fetch-account-details
-    description: Command to fetch account details.
+    description: Fetches the details of the account.
     arguments:
     - name: resource_id
       description: ID of the resource.
@@ -183,141 +183,129 @@ script:
       required: true
     outputs:
     - contextPath: PAM360.Account.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Account.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
     - contextPath: PAM360.Account.operation.Details.DESCRIPTION
-      description: Message
+      description: Description of the account.
       type: string
     - contextPath: PAM360.Account.operation.Details.PASSWDID
-      description: Status of the API call
+      description: ID that is used to perform password-related operations.
       type: string
     - contextPath: PAM360.Account.operation.Details.LAST MODIFIED TIME
-      description: Message
+      description: The time at which the account was last modified.
       type: string
     - contextPath: PAM360.Account.operation.Details.EXPIRY STATUS
-      description: Status of the API call
+      description: Expiry status of the account password.
       type: string
     - contextPath: PAM360.Account.operation.Details.COMPLIANT REASON
-      description: Message
+      description: Reason for the password not being compliant with the password policy.
       type: string
     - contextPath: PAM360.Account.operation.Details.PASSWORD STATUS
-      description: Status of the API call
+      description: The availability status of the password.
       type: string
     - contextPath: PAM360.Account.operation.Details.PASSWORD POLICY
-      description: Message
+      description: The password policy of the account.
       type: string
     - contextPath: PAM360.Account.operation.Details.COMPLIANT STATUS
-      description: Status of the API call
+      description: Status of whether the account password is compliant with the set password policy.
       type: string
     - contextPath: PAM360.Account.operation.Details.LAST ACCESSED TIME
-      description: Message
+      description: The time at which the account was last accessed.
       type: string
   - name: pam360-list-all-resources
-    description: Command to list all resources.
+    description: Lists all owned and shared resources.
     arguments: []
     outputs:
     - contextPath: PAM360.Resource.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Resource.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
     - contextPath: PAM360.Resource.operation.Details.RESOURCE DESCRIPTION
-      description: Message
+      description: Description of the resource. 
       type: string
     - contextPath: PAM360.Resource.operation.Details.RESOURCE TYPE
-      description: Status of the API call
+      description: Type of the resource.
       type: string
     - contextPath: PAM360.Resource.operation.Details.RESOURCE ID
-      description: Message
+      description: ID of the resource.
       type: string
     - contextPath: PAM360.Resource.operation.Details.RESOURCE NAME
-      description: Status of the API call
+      description: Name of the resource.
       type: string
     - contextPath: PAM360.Resource.operation.Details.NOOFACCOUNTS
-      description: Message
+      description: The number of accounts associated with the resource.
       type: string
   - name: pam360-list-all-accounts
-    description: Command to list all account of a resource.
+    description: Lists all accounts belonging to the resource.
     arguments:
     - name: resource_id
       description: ID of the resource.
       required: true
     outputs:
     - contextPath: PAM360.Account.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Account.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
     - contextPath: PAM360.Account.operation.Details.LOCATION
-      description: Message
+      description: Location of the account.
       type: string
     - contextPath: PAM360.Account.operation.Details.RESOURCE DESCRIPTION
-      description: Status of the API call
+      description: Description of the resource.
       type: string
     - contextPath: PAM360.Account.operation.Details.RESOURCE TYPE
-      description: Message
+      description: The resource type assigned to the account.
       type: string
     - contextPath: PAM360.Account.operation.Details.RESOURCE ID
-      description: Status of the API call
+      description: ID of the resource.
       type: string
     - contextPath: PAM360.Account.operation.Details.DEPARTMENT
-      description: Message
+      description: The department to which the account belongs.
       type: string
     - contextPath: PAM360.Account.operation.Details.RESOURCE OWNER
-      description: Status of the API call
+      description: Name of the resource owner.
       type: string
     - contextPath: PAM360.Account.operation.Details.RESOURCE PASSWORD POLICY
-      description: Message
+      description: The password policy of the resource to which the account belongs.
       type: string
     - contextPath: PAM360.Account.operation.Details.RESOURCE URL
-      description: Status of the API call
+      description: URL of the resource.
       type: string
     - contextPath: PAM360.Account.operation.Details.DOMAIN NAME
-      description: Message
+      description: The domain name of the resource.
       type: string
     - contextPath: PAM360.Account.operation.Details.RESOURCE NAME
-      description: Message
+      description: The name of the resource to which the account belongs.
       type: string
     - contextPath: PAM360.Account.operation.Details.DNS NAME
-      description: Status of the API call
-      type: string
-    - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.ISFAVPASS
-      description: Message
+      description: DNS name of the resource.
       type: string
     - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.ACCOUNT ID
-      description: Message
+      description: ID of the account.
       type: string
     - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.ACCOUNT NAME
-      description: Message
+      description: The name of the account.
       type: string
     - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.PASSWORD STATUS
-      description: Message
+      description: The availability status of the account password.
       type: string
     - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.ACCOUNT PASSWORD POLICY
-      description: Message
-      type: string
-    - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.IS_TICKETID_REQD_ACW
-      description: Message
+      description: The password policy assigned to the account.
       type: string
     - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.PASSWDID
-      description: Message
-      type: string
-    - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.IS_TICKETID_REQD_MANDATORY
-      description: Message
-      type: string
-    - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.IS_TICKETID_REQD
-      description: Message
+      description: Account ID needed for password-based operations.
       type: string
     - contextPath: PAM360.Account.operation.Details.ACCOUNT LIST.ISREASONREQUIRED
-      description: Message
+      description: Reason to access the password.
       type: string
   - name: pam360-update-account-password
-    description: Command to update account password.
+    description: Updates the account password.
     arguments:
     - name: resource_id
       description: ID of the resource.
@@ -329,21 +317,21 @@ script:
       description: Password to be updated.
       required: true
     - name: reset_type
-      description: Reset type
+      description: The type of password reset to be done - LOCAL or REMOTE.
       required: true
     - name: reason
-      description: Reason to update password.
+      description: Reason to update the password.
     - name: ticket_id
-      description: Ticket ID when Ticketing system is enabled.
+      description: Ticket ID when the ticketing system integration is enabled.
     outputs:
     - contextPath: PAM360.Account.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Account.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
   - name: pam360-fetch-resource-account-id
-    description: Command to fetch resource and account ID.
+    description: Fetches the IDs of the resources and accounts.
     arguments:
     - name: resource_name
       description: Name of the resource.
@@ -353,16 +341,16 @@ script:
       required: true
     outputs:
     - contextPath: PAM360.Resource.operation.result.message
-      description: Message
+      description: Command execution status.
       type: string
     - contextPath: PAM360.Resource.operation.result.status
-      description: Status of the API call
+      description: Status of the operation.
       type: string
     - contextPath: PAM360.Resource.operation.Details.RESOURCEID
-      description: Resource ID 
+      description: ID of the resource. 
       type: string
     - contextPath: PAM360.Resource.operation.Details.ACCOUNTID
-      description: Account ID
+      description: ID of the account.
       type: string
   isfetch: false
   runonce: false

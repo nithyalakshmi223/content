@@ -1,8 +1,4 @@
-## BaseIntegration Help
+## ManageEngine PAM360
+ManageEngine PAM360 is a comprehensive Privileged Access Management (PAM) solution that fortifies security for sensitive enterprise data in an IT environment. The product comes with a secure storage repository that can store and manage different types of  privileged accounts, privileged passwords, and digital signatures such as SSH keys and SSL certificates.
 
-Markdown file for integration configuration  help snippet. In this file add:
-- Brief information about how to retrieve the API key of your product
-- Other useful information on how to configure your integration in XSOAR
-
-Since this is a Markdown file, we encourage you to use MD formatting for sections, sub-sections, lists, etc.
-
+In order to use this product, you will need to add the server URL. The default port used by PAM360 is 8282.

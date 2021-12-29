@@ -472,7 +472,7 @@ def main():
             'pam360-fetch-resource-account-id': pam360_fetch_resource_account_id,
         }
         if command in commands:
-            return_results(commands[command](client, **demisto.args()))
+            return_results(commands[command](client, **demisto.args()))  # type: ignore[operator]
 
         else:
             raise NotImplementedError(f'{command} is not an existing PAM360 command')

@@ -1,1 +1,1 @@
-Use the ManageEngine PAM360 to manage passwords, resources and accounts from Cortex XSOAR.
+Use ManageEngine PAM360, a privileged access management solution to manage critical enterprise data such as privileged resources and accounts and secure credentials from Cortex XSOAR.
