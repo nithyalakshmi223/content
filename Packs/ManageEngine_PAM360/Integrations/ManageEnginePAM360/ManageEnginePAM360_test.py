@@ -18,21 +18,21 @@ FETCH_PASSWORD_ARGS = {
 }
 
 CREATE_RESOURCE_ARGS = {
-    "resource_name": "win10",
+    "resource_name": "SOUTH-FIN-WINSERQA-09",
     "resource_type": "Windows",
-    "account_name": "admin",
-    "password": "Test@123"
+    "account_name": "administrator",
+    "password": "QA!K>35Hgg(x"
 }
 
 CREATE_ACCOUNT_ARGS = {
     "resource_id": "1",
     "account_name": "admin",
-    "password": "Test@123"
+    "password": "t8BRq)<6h9g1"
 }
 
 UPDATE_RESOURCE_ARGS = {
     "resource_id": "1",
-    "resource_name": "win10",
+    "resource_name": "SOUTH-FIN-WINSERQA-09",
     "resource_url": "https://pam360:8282"
 }
 
@@ -40,7 +40,7 @@ UPDATE_ACCOUNT_ARGS = {
     "resource_id": "1",
     "account_id": "1",
     "account_name": "admin",
-    "notes": "admin account"
+    "notes": "Windows server resources reserved for testing API"
 }
 
 FETCH_ACCOUNT_DETAILS_ARGS = {
@@ -55,14 +55,15 @@ LIST_ALL_ACCOUNTS_ARGS = {
 UPDATE_ACCOUNT_PASSWORD_ARGS = {
     "resource_id": "1",
     "account_id": "1",
-    "new_password": "Test@123",
+    "new_password": "A8>ne3J&0Z",
     "reset_type": "LOCAL",
-    "reason": "Need to change password of Login Windows Server",
+    "reason": "Password Expired",
     "ticket_id": "1"
 }
 
 FETCH_RESOURCE_ACCOUNT_ID_ARGS = {
-    "resource_name": "win10"
+    "resource_name": "SOUTH-FIN-WINSERQA-09",
+    "account_name": "administrator"
 }
 
 
@@ -91,7 +92,7 @@ def test_manageengine_pam360_commands(command, args, http_response, context, moc
     - create the context
     - validate the expected_result and the created context
     """
-    client = Client(server_url="https://mepam30:8282", app_token="B698EF92-B151-4E5C-969D-CA7B50DF4E9D", use_ssl=False,
+    client = Client(server_url="https://pam30:8282", app_token="B698EF92-B151-4E5C-969D-CA7B50DF4E9D", verify_certificate=False,
                     proxy=False)
 
     mocker.patch.object(Client, '_http_request', return_value=http_response)

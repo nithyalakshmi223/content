@@ -17,7 +17,7 @@ CREATE_RESOURCE_CONTEXT = {
   "PAM360.Resource(val.message && val.message == obj.message)": {
    "operation":{
       "result":{
-         "message":"Resource win-10 has been added successfully",
+         "message":"Resource SOUTH-FIN-WINSERQA-09 has been added successfully",
          "status":"Success"
       },
       "name":"CREATE RESOURCE"
@@ -60,7 +60,7 @@ UPDATE_ACCOUNT_CONTEXT = {
   "PAM360.Account(val.message && val.message == obj.message)": {
    "operation":{
       "result":{
-         "message":"Account temp modified successfully",
+         "message":"Account admin modified successfully",
          "status":"Success"
       },
       "name":"EDIT ACCOUNT"
@@ -100,10 +100,10 @@ LIST_ALL_RESOURCE_CONTEXT = {
       },
       "Details":[
          {
-            "RESOURCE DESCRIPTION":"",
+            "RESOURCE DESCRIPTION":"Windows server resources reserved for testing API",
             "RESOURCE TYPE":"Fortigate Firewall",
             "RESOURCE ID":"1",
-            "RESOURCE NAME":"temp",
+            "RESOURCE NAME":"SOUTH-FIN-WINSERQA-09",
             "NOOFACCOUNTS":"1"
          }
       ],
@@ -121,8 +121,8 @@ LIST_ALL_ACCOUNTS_CONTEXT = {
          "status":"Success"
       },
       "Details":{
-         "LOCATION":"",
-         "RESOURCE DESCRIPTION":"",
+         "LOCATION":"Plaza - South Wing",
+         "RESOURCE DESCRIPTION":"Windows server resources reserved for testing API",
          "RESOURCE TYPE":"Fortigate Firewall",
          "RESOURCE ID":"1",
          "ACCOUNT LIST":[
@@ -133,7 +133,7 @@ LIST_ALL_ACCOUNTS_CONTEXT = {
                   "SSH",
                   "Telnet"
                ],
-               "ACCOUNT NAME":"temp",
+               "ACCOUNT NAME":"administrator",
                "PASSWORD STATUS":"****",
                "ISREMOTEAPPONLY":"false",
                "ACCOUNT PASSWORD POLICY":"Strong",
@@ -145,15 +145,15 @@ LIST_ALL_ACCOUNTS_CONTEXT = {
                "ISREASONREQUIRED":"false"
             }
          ],
-         "DEPARTMENT":"",
+         "DEPARTMENT":"Finance",
          "RESOURCE OWNER":"admin",
          "RESOURCE PASSWORD POLICY":"Strong",
          "RESOURCE URL":"https://pam360:8282",
          "NEWSSHTERMINAL":"false",
-         "DOMAIN NAME":"",
+         "DOMAIN NAME":"SOUTH-FIN-WINSERQA-09",
          "ALLOWOPENURLINBROWSER":"true",
-         "RESOURCE NAME":"temp",
-         "DNS NAME":""
+         "RESOURCE NAME":"SOUTH-FIN-WINSERQA-09",
+         "DNS NAME":"SOUTH-FIN-WINSERQA-09"
       },
       "name":"GET RESOURCE ACCOUNTLIST"
    }

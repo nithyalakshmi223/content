@@ -6,8 +6,8 @@ urllib3.disable_warnings()
 
 
 class Client(BaseClient):
-    def __init__(self, server_url: str, use_ssl: bool, proxy: bool, app_token=str):
-        super().__init__(base_url=server_url, verify=use_ssl, proxy=proxy)
+    def __init__(self, server_url: str, verify_certificate: bool, proxy: bool, app_token=str):
+        super().__init__(base_url=server_url, verify=verify_certificate, proxy=proxy)
         self._app_token = app_token
 
     def fetch_password(self, method, resource_id, account_id, reason, ticket_id):
@@ -249,7 +249,6 @@ def pam360_fetch_password(
         ticket_id: str = ""
 ):
     creds_list = client.fetch_password("GET", resource_id, account_id, reason, ticket_id)
-    '''password = creds_list.get('operation').get('Details').get('PASSWORD')'''
     readable_output = f'{creds_list}'
     results = CommandResults(
         outputs=creds_list,
@@ -452,10 +451,10 @@ def main():
     params = demisto.params()
     url = params.get('url')
     app_token = params.get('appToken')
-    use_ssl = not params.get('insecure', False)
-    proxy = params.get('proxy', False)
+    verify_certificate = not params.get('insecure')
+    proxy = params.get('proxy')
     try:
-        client = Client(server_url=url, use_ssl=use_ssl, proxy=proxy, app_token=app_token)
+        client = Client(server_url=url, verify_certificate=verify_certificate, proxy=proxy, app_token=app_token)
         command = demisto.command()
         demisto.debug(f'Command being called in ManageEngine PAM360 is: {command}')
         commands = {

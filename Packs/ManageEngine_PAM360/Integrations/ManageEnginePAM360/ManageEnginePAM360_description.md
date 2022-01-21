@@ -1,4 +1,4 @@
 ## ManageEngine PAM360
-ManageEngine PAM360 is a comprehensive Privileged Access Management (PAM) solution that fortifies security for sensitive enterprise data in an IT environment. The product comes with a secure storage repository that can store and manage different types of  privileged accounts, privileged passwords, and digital signatures such as SSH keys and SSL certificates.
+PAM360 is a comprehensive solution for businesses looking to incorporate PAM into their overall security operations. PAM360's robust core functionalities and contextual integration capabilities enables IT admins take a holistic approach to privileged access security via a central console facilitating a deep correlation of privileged access data and overall network data, resulting in meaningful inferences and quicker remedies.
 
-In order to use this product, you will need to add the server URL. The default port used by PAM360 is 8282.
+In order to use this product, you will need to add a server URL. The default port used by PAM360 is 8282.
